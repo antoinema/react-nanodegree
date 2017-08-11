@@ -7,6 +7,7 @@ function Bookshelf(props) {
   const title = props.title
   const key = props.ukey
   const books = props.books
+
   return (
     <div className="bookshelf">
       <h2 className="bookshelf-title">{title}</h2>
@@ -14,11 +15,8 @@ function Bookshelf(props) {
         <ol className="books-grid">
           {
             books.filter((book) => book.shelf === key).map((book) =>
-            /**
-             * TODO: More robust industry indentifier fetch
-             */
-            <li key={book.industryIdentifiers[0].identifier}>
-              <Book book={book} />
+            <li key={book.id}>
+              <Book book={book} changeShelf={props.changeShelf} />
             </li>
           )}
         </ol>

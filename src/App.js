@@ -4,11 +4,12 @@ import './App.css'
 import Bookshelf from './Components/Bookshelf'
 import Search from './Components/Search'
 import { Route, Link } from 'react-router-dom'
+import update from 'immutability-helper';
 
 
 class BooksApp extends React.Component {
   state = {
-    books: []
+    books: null
   }
 
   componentDidMount() {
@@ -17,8 +18,21 @@ class BooksApp extends React.Component {
     })
   }
 
+  changeShelf = (book, newShelf) => {
+    BooksAPI.update(book, newShelf).then(pro => {
+      book.shelf = newShelf
+      this.setState((state) => ({
+        books: update(this.state.books, {$merge: book})
+      }))
+    })
+  }
+
   render() {
-    const allBooks = this.state.books
+    const shelves = [
+      {ukey: "currentlyReading", title: "Currently reading"},
+      {ukey: "wantToRead", title: "Want to read"},
+      {ukey: "read", title: "Read"}
+    ]
     return (
       <div className="app">
           <Route exact path='/' render={() => (
@@ -27,16 +41,11 @@ class BooksApp extends React.Component {
                 <h1>My Reads</h1>
               </div>
               <div className="list-books-content">
-                  {!allBooks.length ? <p className="loading-message">Fetching your books...</p> :
+                  {this.state.books == null ? <p className="loading-message">Fetching your books...</p> :
                   <div>
-                     {
-                        /**
-                        * TODO: Loop over a Bookshelves array
-                        */
-                     }
-                      <Bookshelf title='Currently reading' ukey='currentlyReading' books={allBooks} />
-                      <Bookshelf title='Want to read' ukey='wantToRead' books={allBooks} />
-                      <Bookshelf title='Read' ukey='read' books={allBooks} />
+                      {shelves.map((shelf) =>
+                        <Bookshelf title={shelf.title} key={shelf.ukey} ukey={shelf.ukey} books={this.state.books} changeShelf={this.changeShelf} />
+                      )}
                   </div>
                   }
 

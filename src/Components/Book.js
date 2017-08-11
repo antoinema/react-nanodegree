@@ -5,12 +5,13 @@ import Cover from './Cover'
 
 function Book(props) {
 	const book = props.book
+
 	return (
 	  <div className="book">
 	    <div className="book-top">
 	    	<Cover book={book}/>
 	      <div className="book-shelf-changer">
-          <select value={book.shelf} onChange={props.changeShelf}>
+          <select defaultValue={book.shelf} onChange={(event) => props.changeShelf(book, event.target.value)}>
 	          <option value="none" disabled>Move to...</option>
 	          <option value="currentlyReading">Currently Reading</option>
 	          <option value="wantToRead">Want to Read</option>
@@ -27,7 +28,7 @@ function Book(props) {
 
 Book.PropTypes = {
     book: PropTypes.object.isRequired,
-    changeShelf: PropTypes.function.isRequired
+    changeShelf: PropTypes.func.isRequired
 }
 
 
