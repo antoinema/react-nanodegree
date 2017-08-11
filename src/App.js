@@ -29,6 +29,11 @@ class BooksApp extends React.Component {
               <div className="list-books-content">
                   {!allBooks.length ? <p className="loading-message">Fetching your books...</p> :
                   <div>
+                     {
+                        /**
+                        * TODO: Loop over a Bookshelves array
+                        */
+                     }
                       <Bookshelf title='Currently reading' ukey='currentlyReading' books={allBooks} />
                       <Bookshelf title='Want to read' ukey='wantToRead' books={allBooks} />
                       <Bookshelf title='Read' ukey='read' books={allBooks} />
