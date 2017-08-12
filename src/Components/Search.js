@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import escapeRegExp from 'escape-string-regexp'
 import * as BooksAPI from '../BooksAPI'
 import Book from './Book'
+import { Link } from 'react-router-dom'
 
 
 class Search extends Component {
@@ -52,7 +53,8 @@ class Search extends Component {
     return (
       <div className="search-books">
         <div className="search-books-bar">
-          <a className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</a>
+          <Link className='close-search' to='/'>Close</Link>
+
           <div className="search-books-input-wrapper">
             <input type="text" placeholder="Search by title or author"
             onChange={(event) => this.updateQuery(event.target.value)}/>
