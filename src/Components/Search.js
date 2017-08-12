@@ -15,10 +15,24 @@ class Search extends Component {
   updateQuery = (query) => {
     this.setState({ query: query.trim() })
     if (query) {
-      const match = new RegExp(escapeRegExp(query), 'i')
-      BooksAPI.search(query, 20).then(res => {
+      BooksAPI.search(escapeRegExp(query), 20).then(res => {
+        if (res.error) {
+          this.setState({
+            searchResults: []
+          })
+          return
+        }
+        const finalRes = res.map((book) => {
+          const alreadyOnShelf = this.props.books.find(shelvedBook => shelvedBook.id === book.id)
+          if (alreadyOnShelf) {
+            return alreadyOnShelf
+          } else {
+            book.shelf = "none"
+            return book
+          }
+        })
         this.setState({
-          searchResults: res
+          searchResults: finalRes
         })
       })
     } else {
@@ -34,6 +48,7 @@ class Search extends Component {
 
   render() {
     const { searchResults, query } = this.state
+
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -47,9 +62,9 @@ class Search extends Component {
           <ol className="books-grid">
           {
             !query ? null :
-            searchResults.length ? searchResults.map((book) =>
+            searchResults.length > 0 ? searchResults.map((book) =>
             <li key={book.id}>
-              <Book book={book} />
+              <Book book={book} changeShelf={this.props.changeShelf} />
             </li>
           ) : "No results"
           }
@@ -58,6 +73,11 @@ class Search extends Component {
       </div>
     )
   }
+}
+
+Book.PropTypes = {
+    book: PropTypes.object.isRequired,
+    changeShelf: PropTypes.func.isRequired
 }
 
 export default Search
