@@ -4,7 +4,6 @@ import './App.css'
 import Bookshelf from './Components/Bookshelf'
 import Search from './Components/Search'
 import { Route, Link } from 'react-router-dom'
-import update from 'immutability-helper';
 
 
 class BooksApp extends React.Component {
@@ -33,6 +32,7 @@ class BooksApp extends React.Component {
       {ukey: "wantToRead", title: "Want to read"},
       {ukey: "read", title: "Read"}
     ]
+
     return (
       <div className="app">
           <Route exact path='/' render={() => (
@@ -44,7 +44,7 @@ class BooksApp extends React.Component {
                   {this.state.books == null ? <p className="loading-message">Fetching your books...</p> :
                   <div>
                       {shelves.map((shelf) =>
-                        <Bookshelf title={shelf.title} key={shelf.ukey} ukey={shelf.ukey} books={this.state.books} changeShelf={this.changeShelf} />
+                        <Bookshelf title={shelf.title} key={shelf.ukey} ukey={shelf.ukey} books={this.state.books} changeShelf={this.changeShelf} shelves={shelves} />
                       )}
                   </div>
                   }

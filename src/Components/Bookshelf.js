@@ -16,7 +16,7 @@ function Bookshelf(props) {
           {
             books.filter((book) => book.shelf === key).map((book) =>
             <li key={book.id}>
-              <Book book={book} changeShelf={props.changeShelf} />
+              <Book book={book} changeShelf={props.changeShelf} shelves={props.shelves}/>
             </li>
           )}
         </ol>
@@ -27,7 +27,8 @@ function Bookshelf(props) {
 
 Bookshelf.PropTypes = {
   title: PropTypes.string.isRequired,
-  key: PropTypes.string.isRequired
+  key: PropTypes.string.isRequired,
+  shelves: PropTypes.array.isRequired
 }
 
 
