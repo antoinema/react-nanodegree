@@ -10,16 +10,21 @@ class Search extends Component {
 
   state = {
     query: '',
-    searchResults: []
+    searchResults: [],
+    searching: false
   }
 
   updateQuery = (query) => {
     this.setState({ query: query.trim() })
     if (query) {
+      this.setState({
+        searching: true
+      })
       BooksAPI.search(escapeRegExp(query), 20).then(res => {
         if (res.error) {
           this.setState({
-            searchResults: []
+            searchResults: [],
+            searching: false
           })
           return
         }
@@ -33,12 +38,14 @@ class Search extends Component {
           }
         })
         this.setState({
-          searchResults: finalRes
+          searchResults: finalRes,
+          searching: false
         })
       })
     } else {
         this.setState({
-          searchResults: []
+          searchResults: [],
+          searching: false
         })
     }
   }
@@ -60,7 +67,10 @@ class Search extends Component {
             onChange={(event) => this.updateQuery(event.target.value)}/>
           </div>
 
-
+          { this.state.searching ?
+            <div className='search-loading'>Loading...</div>
+            : null
+          }
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
