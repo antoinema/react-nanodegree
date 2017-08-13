@@ -59,16 +59,18 @@ class Search extends Component {
             <input type="text" placeholder="Search by title or author"
             onChange={(event) => this.updateQuery(event.target.value)}/>
           </div>
+
+
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
           {
-            !query ? null :
+          !query ? null :
             searchResults.length > 0 ? searchResults.map((book) =>
-            <li key={book.id}>
-              <Book book={book} changeShelf={this.props.changeShelf} />
-            </li>
-          ) : "No results"
+              <li key={book.id}>
+                <Book book={book} changeShelf={this.props.changeShelf} shelves={this.props.shelves}/>
+              </li>
+            ) : "No results"
           }
           </ol>
         </div>
@@ -79,7 +81,8 @@ class Search extends Component {
 
 Book.PropTypes = {
     book: PropTypes.object.isRequired,
-    changeShelf: PropTypes.func.isRequired
+    changeShelf: PropTypes.func.isRequired,
+    shelves: PropTypes.array.isRequired
 }
 
 export default Search
