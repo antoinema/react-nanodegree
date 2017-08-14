@@ -26,36 +26,38 @@ class Search extends Component {
             searchResults: [],
             searching: false
           })
-          return
+        } else {
+          this.setState({
+            searchResults: res,
+            searching: false
+          })
         }
-        const finalRes = res.map((book) => {
-          const alreadyOnShelf = this.props.books.find(shelvedBook => shelvedBook.id === book.id)
-          if (alreadyOnShelf) {
-            return alreadyOnShelf
-          } else {
-            book.shelf = "none"
-            return book
-          }
-        })
-        this.setState({
-          searchResults: finalRes,
-          searching: false
-        })
       })
     } else {
-        this.setState({
-          searchResults: [],
-          searching: false
-        })
+      this.setState({
+        searchResults: [],
+        searching: false
+      })
     }
   }
 
-  clearQuery = () => {
-    this.setState({ query: '' })
+  mergeLibraryWithAPIResults = (apiResults) => {
+    const finalRes = apiResults.map((book) => {
+      const alreadyOnShelf = this.props.books.find(shelvedBook => shelvedBook.id === book.id)
+      if (alreadyOnShelf) {
+        return alreadyOnShelf
+      } else {
+        book.shelf = "none"
+        return book
+      }
+    })
+    return finalRes
   }
 
   render() {
     const { searchResults, query } = this.state
+    const finalRes = this.mergeLibraryWithAPIResults(searchResults)
+
 
     return (
       <div className="search-books">
@@ -76,7 +78,7 @@ class Search extends Component {
           <ol className="books-grid">
           {
           !query ? null :
-            searchResults.length > 0 ? searchResults.map((book) =>
+            finalRes.length > 0 ? finalRes.map((book) =>
               <li key={book.id}>
                 <Book book={book} changeShelf={this.props.changeShelf} shelves={this.props.shelves}/>
               </li>
